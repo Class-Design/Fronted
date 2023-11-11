@@ -51,4 +51,11 @@ export const routes = [
     componentPath: 'user',
     authority:3
   },
+  {
+    name: '我的信息',
+    key: 'info',
+    icon: <IconUser />,
+    componentPath: 'info',
+    authority:1
+  },
 ];

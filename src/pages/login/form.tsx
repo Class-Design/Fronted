@@ -21,6 +21,7 @@ export default function LoginForm() {
     localStorage.setItem('isLogin', isLogin);
     // 记录权限
     localStorage.setItem('authority', params.data.authority.authority);
+    localStorage.setItem('name', params.data.userDetail.name);
     dispatch({
       type: 'LOGIN',
       payload: params,

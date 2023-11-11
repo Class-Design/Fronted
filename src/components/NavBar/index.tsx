@@ -27,7 +27,9 @@ function Navbar() {
   // const userInfo = useSelector((state: ReducerState) => state.login.userInfo);
   const isLogin=localStorage.getItem('isLogin')
   const dispatch = useDispatch();
-
+  // const [name,setName]=useState("测试用户")
+  // const name =localStorage.getItem('name');
+  const name=localStorage.getItem('name')
   const onMenuItemClick = async (key) => {
     if (key === 'logout') {
       const res: any = await logout();
@@ -112,7 +114,7 @@ function Navbar() {
                 </div>
               }
             >
-              <Typography.Text className={styles.username}>{"测试用户"}</Typography.Text>
+              <Typography.Text className={styles.username}>{name}</Typography.Text>
             </Dropdown>
           </li>
         )}

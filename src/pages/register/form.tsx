@@ -1,6 +1,6 @@
-import { Form, Input, Button, Space, Select, InputNumber, Message } from '@arco-design/web-react';
+import { Form, Input, Button, Space, Message } from '@arco-design/web-react';
 import { FormInstance } from '@arco-design/web-react/es/Form';
-import { IconEmail, IconGift, IconLocation, IconLock, IconMan, IconRobot, IconStamp, IconUser } from '@arco-design/web-react/icon';
+import { IconEmail, IconLock, IconUser } from '@arco-design/web-react/icon';
 import React, { useRef, useState } from 'react';
 
 import styles from './style/index.module.less';
@@ -114,7 +114,7 @@ export default function RegisterForm() {
           />
         </Form.Item>
 
-        <Form.Item
+        {/* <Form.Item
           field="name"
           rules={[
             { required: true, message: '请输入姓名'},
@@ -124,8 +124,8 @@ export default function RegisterForm() {
             prefix={<IconRobot />}
             placeholder='请输入姓名'
           />
-        </Form.Item>
-        <Form.Item
+        </Form.Item> */}
+        {/* <Form.Item
           field="classs"
           rules={[
             { required: true, message: '请输入班级'},
@@ -135,8 +135,8 @@ export default function RegisterForm() {
             prefix={<IconStamp />}
             placeholder='请输入班级'
           />
-        </Form.Item>
-        <Form.Item
+        </Form.Item> */}
+        {/* <Form.Item
           field="age"
           rules={[
             { required: true, message: '请输入年龄'},
@@ -146,8 +146,8 @@ export default function RegisterForm() {
             prefix={<IconGift />}
             placeholder='请输入年龄'
           />
-        </Form.Item>
-        <Form.Item
+        </Form.Item> */}
+        {/* <Form.Item
           field="sex"
           rules={[
             { required: true, message: '请选择性别'},
@@ -172,8 +172,8 @@ export default function RegisterForm() {
                                     </Select.Option>
                                 ))}
                             </Select>
-        </Form.Item>
-        <Form.Item
+        </Form.Item> */}
+        {/* <Form.Item
           field="location"
           rules={[
             { required: true, message: '请输入地址'},
@@ -183,7 +183,7 @@ export default function RegisterForm() {
             prefix={<IconLocation />}
             placeholder='请输入地址'
           />
-        </Form.Item>
+        </Form.Item> */}
         <Form.Item
           field="mobile"
           rules={[
