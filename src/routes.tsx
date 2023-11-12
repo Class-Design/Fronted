@@ -38,6 +38,13 @@ export const routes = [
     authority:2,
   },
   {
+    name: '借阅详情',
+    key: 'borrow-manage',
+    icon: <IconUser />,
+    componentPath: 'borrow-manage',
+    authority:2
+  },
+  {
     name: '书本详情',
     key: 'book-manage/detail',
     icon: <IconBook />,

@@ -6,7 +6,6 @@ import {
   Form,
   Select,
   Breadcrumb,
-  Grid,
   Space,
   InputNumber,
   Modal,
@@ -18,8 +17,6 @@ import { IconEmail, IconGift, IconLocation, IconMan, IconRobot, IconStamp } from
 import { getInfo } from '../../api/user';
 import { updateDetail } from '../../api/user';
 import history from '../../history';
-const Row = Grid.Row;
-const Col = Grid.Col;
 
 function Info() {
   const [form] = Form.useForm();
@@ -88,22 +85,9 @@ function Info() {
   // }
 
 
-  const onReset = () => {
-    form.resetFields();
-    fetchData();
-  };
   const onCancel = () => {
     setVisible(false)
     form.resetFields();
-  };
-
-  const layout = {
-    labelCol: {
-      span: 8,
-    },
-    wrapperCol: {
-      span: 16,
-    },
   };
   const showModal = () => {
     setVisible(true)

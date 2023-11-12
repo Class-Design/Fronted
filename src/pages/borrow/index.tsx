@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   Button,
@@ -11,6 +11,7 @@ import {
   DatePicker,
   Grid,
   Message,
+  Popover,
 } from '@arco-design/web-react';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -27,17 +28,20 @@ import {
   reserveBook,
 } from '../../api/borrow';
 import dayjs from 'dayjs';
+import { get } from '../../api/publisher';
 const Row = Grid.Row;
 const Col = Grid.Col;
 
 function Borrow() {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
+  const [content, setContent] = useState("暂无信息")
+  const [publisherName, setName] = useState("暂无信息")
   const columns = [
     {
       title: '编号',
       dataIndex: 'bookId',
-      disabled:true
+      disabled: true
     },
     {
       title: '书名',
@@ -54,6 +58,13 @@ function Borrow() {
     {
       title: '出版社',
       dataIndex: 'publisher',
+      render: (_, record: any) => {
+        return (
+          <Popover position='rt' title={publisherName} content={content} onVisibleChange={(visible) => onHover(visible, record)}>
+            <div>{record.publisher}</div>
+          </Popover>
+        )
+      }
     },
     {
       title: '订阅状态',
@@ -61,9 +72,9 @@ function Borrow() {
       render: (_, record: any) => {
         return (
           <div style={{
-            color:record.status===0?'red':'green'
+            color: record.status === 0 ? 'red' : 'green'
           }}>
-            {record.status===0?"不可借阅":"可借阅"}
+            {record.status === 0 ? "不可借阅" : "可借阅"}
           </div>
         );
       },
@@ -85,8 +96,8 @@ function Borrow() {
 
           {record.status === 1 && (
             <>
-              <Popconfirm title="确定要借阅该书?" 
-              onOk={() => onBorrow(record)}
+              <Popconfirm title="确定要借阅该书?"
+                onOk={() => onBorrow(record)}
               >
                 <Button>
                   借阅
@@ -96,8 +107,8 @@ function Borrow() {
           )}
           {record.status === 0 && (
             <>
-              <Popconfirm title="确定要预定该书?" 
-              onOk={() => onReserve(record)}
+              <Popconfirm title="确定要预定该书?"
+                onOk={() => onReserve(record)}
               >
                 <Button>
                   预定
@@ -117,7 +128,17 @@ function Borrow() {
   useEffect(() => {
     fetchData();
   }, []);
-
+  async function onHover(visible, record) {
+    if (visible) {
+      const data={'name':record.publisher}
+      const res = await get(data)
+      setName(record.publisher)
+      setContent(res.data.mobile)
+    }else{
+      setName("暂无消息")
+      setContent("暂无消息")
+    }
+  }
   async function fetchData(params = {}) {
     dispatch({ type: UPDATE_LOADING, payload: { loading: true } });
     try {
@@ -132,33 +153,33 @@ function Borrow() {
         dispatch({ type: UPDATE_LOADING, payload: { loading: false } });
         dispatch({ type: UPDATE_FORM_PARAMS, payload: { params } });
       }
-    } catch (error) {}
+    } catch (error) { }
   }
   async function onReserve(data) {
     dispatch({ type: UPDATE_LOADING, payload: { loading: true } });
-    const res:any=await reserveBook(data)
+    const res: any = await reserveBook(data)
     console.log(res);
     if (res) {
       dispatch({ type: UPDATE_LOADING, payload: { loading: false } });
     }
-    if(res.code=='200'){
+    if (res.code == '200') {
       Message.success("预定成功")
-    }else{
-      Message.error("预定失败："+res.message)
+    } else {
+      Message.error("预定失败：" + res.message)
     }
     fetchData();
   }
-  async function onBorrow(data){
+  async function onBorrow(data) {
     dispatch({ type: UPDATE_LOADING, payload: { loading: true } });
-    const res:any=await borrow(data)
+    const res: any = await borrow(data)
     console.log(res);
     if (res) {
       dispatch({ type: UPDATE_LOADING, payload: { loading: false } });
     }
-    if(res.code=='200'){
+    if (res.code == '200') {
       Message.success("借阅成功")
-    }else{
-      Message.error("借阅失败："+res.message)
+    } else {
+      Message.error("借阅失败：" + res.message)
     }
     fetchData();
   }
@@ -199,10 +220,6 @@ function Borrow() {
       <Card bordered={false}>
         <Form
           form={form}
-          initialValues={{
-            categories: '',
-            publishStatus: '0',
-          }}
           {...layout}
           style={{ marginBottom: 20 }}
           layout="horizontal"
@@ -237,7 +254,7 @@ function Borrow() {
                     },
                   ].map((item) => (
                     <Select.Option key={item.key} value={item.value}>
-                      {item.value===1?'可借阅':'不可借阅'}
+                      {item.value === 1 ? '可借阅' : '不可借阅'}
                     </Select.Option>
                   ))}
                 </Select>

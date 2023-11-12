@@ -7,6 +7,13 @@ export async function getList(params) {
     });
 }
 
+export async function getBorrowList(params) {
+    return request({
+        url: '/borrow-manage/list',
+        params,
+    });
+}
+
 export async function addBook(data) {
     return request({
         url: '/book/add',

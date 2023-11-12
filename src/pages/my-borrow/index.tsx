@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Table,
   Button,
@@ -6,6 +6,7 @@ import {
   Popconfirm,
   Breadcrumb,
   Message,
+  Popover,
 } from '@arco-design/web-react';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -17,12 +18,15 @@ import {
 import { ReducerState } from '../../redux';
 import styles from './style/index.module.less';
 import {
-   myBorrow, returnBook,
+  myBorrow, returnBook,
 } from '../../api/borrow';
 import dayjs from 'dayjs';
+import { get } from '../../api/publisher';
 
 
 function MyBorrow() {
+  const [content, setContent] = useState("暂无信息")
+  const [publisherName, setName] = useState("暂无信息")
   const dispatch = useDispatch();
   const columns = [
     {
@@ -44,6 +48,13 @@ function MyBorrow() {
     {
       title: '出版社',
       dataIndex: 'bookInfo.publisher',
+      render: (_, record: any) => {
+        return (
+          <Popover position='rt' title={publisherName} content={content} onVisibleChange={(visible) => onHover(visible, record.bookInfo.publisher)}>
+            <div>{record.bookInfo.publisher}</div>
+          </Popover>
+        )
+      }
     },
 
     {
@@ -57,16 +68,16 @@ function MyBorrow() {
     {
       title: '操作',
       dataIndex: 'operations',
-      render: (_,record) => (
+      render: (_, record) => (
         <div className={styles.operations}>
 
-            <>
-              <Popconfirm title="确定要归还该书?" 
+          <>
+            <Popconfirm title="确定要归还该书?"
               onOk={() => onReturn(record)}
-              >
-                <Button>归还</Button>
-              </Popconfirm>
-            </>
+            >
+              <Button>归还</Button>
+            </Popconfirm>
+          </>
         </div>
       ),
     },
@@ -79,6 +90,18 @@ function MyBorrow() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  async function onHover(visible, record) {
+    if (visible) {
+      const data = { 'name': record }
+      const res = await get(data)
+      setName(record)
+      setContent(res.data.mobile)
+    } else {
+      setName("暂无消息")
+      setContent("暂无消息")
+    }
+  }
 
   async function fetchData(params = {}) {
     dispatch({ type: BORROW_LOADING, payload: { loading: true } });
@@ -96,7 +119,7 @@ function MyBorrow() {
         dispatch({ type: BORROW_FORM_PARAMS, payload: { params } });
       }
 
-    } catch (error) {}
+    } catch (error) { }
   }
   async function onReturn(data) {
     dispatch({ type: BORROW_LOADING, payload: { loading: true } });
@@ -105,10 +128,10 @@ function MyBorrow() {
     if (res) {
       dispatch({ type: BORROW_LOADING, payload: { loading: false } });
     }
-    if(res.code==='200'){
+    if (res.code === '200') {
       Message.success("归还成功！")
-    }else{
-      Message.error("归还失败："+res.message)
+    } else {
+      Message.error("归还失败：" + res.message)
     }
     fetchData();
   }

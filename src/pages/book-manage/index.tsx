@@ -10,6 +10,7 @@ import {
   Message,
   DatePicker,
   InputNumber,
+  Popover,
 } from '@arco-design/web-react';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -26,6 +27,7 @@ import styles from './style/index.module.less';
 import { getList, update, addBook } from '../../api/book-manage';
 import dayjs from 'dayjs';
 import history from '../../history';
+import { get } from '../../api/publisher';
 const FormItem = Form.Item;
 
 const formItemLayout = {
@@ -38,10 +40,23 @@ const formItemLayout = {
 };
 
 function Categories() {
+  const [content, setContent] = useState("暂无信息")
+  const [publisherName, setName] = useState("暂无信息")
   const locale = useLocale();
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [title, setTitle] = useState('添加书籍');
+  async function onHover(visible, record) {
+    if (visible) {
+      const data={'name':record.publisher}
+      const res = await get(data)
+      setName(record.publisher)
+      setContent(res.data.mobile)
+    }else{
+      setName("暂无消息")
+      setContent("暂无消息")
+    }
+  }
   const columns = [
     {
       title: '书籍编号',
@@ -58,6 +73,13 @@ function Categories() {
     {
       title: '出版社',
       dataIndex: 'publisher',
+      render: (_, record: any) => {
+        return (
+          <Popover position='rt' title={publisherName} content={content} onVisibleChange={(visible) => onHover(visible, record)}>
+            <div>{record.publisher}</div>
+          </Popover>
+        )
+      }
     },
     {
       title: '价格',
